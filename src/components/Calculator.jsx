@@ -15,7 +15,44 @@ const Calculator = () => {
       setCurrent(current.slice(0, -1));
    };
    const allClearHandler = () => {
-      setCurrent(0);
+      setCurrent("");
+      setPrevious("");
+      setOperation("");
+   };
+   const chooseOperation = (e) => {
+      if (!current) return;
+      if (previous) {
+         let value = compute();
+         setPrevious(value);
+      } else {
+         setPrevious(current);
+      }
+      setCurrent("");
+      setOperation(e.target.getAttribute("data"));
+   };
+   const compute = () => {
+      let result;
+      let previousNumber = parseFloat(previous);
+      let currentNumber = parseFloat(current);
+
+      switch (operation) {
+         case "÷":
+            return (result = previousNumber / currentNumber);
+         case "×":
+            return (result = previousNumber * currentNumber);
+         case "+":
+            return (result = previousNumber + currentNumber);
+         case "-":
+            return (result = previousNumber - currentNumber);
+         default:
+            return;
+      }
+      return result;
+   };
+   const equals = () => {
+      let value = compute();
+      if (value === undefined || value === null) return;
+      setCurrent(value);
       setPrevious("");
       setOperation("");
    };
@@ -33,7 +70,9 @@ const Calculator = () => {
          <Button onClick={deleteHandler} control>
             DEL
          </Button>
-         <Button operation>÷</Button>
+         <Button onClick={chooseOperation} data="÷" operation>
+            ÷
+         </Button>
          <Button data="7" onClick={appendValue}>
             7
          </Button>
@@ -43,7 +82,9 @@ const Calculator = () => {
          <Button data="9" onClick={appendValue}>
             9
          </Button>
-         <Button operation>×</Button>
+         <Button onClick={chooseOperation} data="×" operation>
+            ×
+         </Button>
          <Button data="4" onClick={appendValue}>
             4
          </Button>
@@ -53,7 +94,9 @@ const Calculator = () => {
          <Button data="6" onClick={appendValue}>
             6
          </Button>
-         <Button operation>+</Button>
+         <Button onClick={chooseOperation} data="+" operation>
+            +
+         </Button>
          <Button data="1" onClick={appendValue}>
             1
          </Button>
@@ -63,14 +106,22 @@ const Calculator = () => {
          <Button data="3" onClick={appendValue}>
             3
          </Button>
-         <Button operation>-</Button>
+         <Button onClick={chooseOperation} data="-" operation>
+            -
+         </Button>
          <Button data="." onClick={appendValue} control dot>
             .
          </Button>
          <Button data="0" onClick={appendValue}>
             0
          </Button>
-         <Button gridSpan={2} operation equal>
+         <Button
+            onClick={chooseOperation}
+            data="="
+            gridSpan={2}
+            operation
+            equals={equals}
+         >
             {" "}
             ={" "}
          </Button>
