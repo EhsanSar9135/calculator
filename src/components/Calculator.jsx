@@ -3,21 +3,36 @@ import { Button, Container, Current, Previous, Screen } from "../styles";
 
 const Calculator = () => {
    const [current, setCurrent] = useState("");
+   const [previous, setPrevious] = useState("");
+   const [operation, setOperation] = useState("");
+
    const appendValue = (e) => {
       const value = e.target.getAttribute("data");
       if (value === "." && current.includes(".")) return null;
       setCurrent(current + value);
    };
+   const deleteHandler = () => {
+      setCurrent(current.slice(0, -1));
+   };
+   const allClearHandler = () => {
+      setCurrent(0);
+      setPrevious("");
+      setOperation("");
+   };
    return (
       <Container>
          <Screen>
-            <Previous></Previous>
+            <Previous>
+               {previous} {operation}
+            </Previous>
             <Current>{current}</Current>
          </Screen>
-         <Button gridSpan={2} control>
+         <Button onClick={allClearHandler} gridSpan={2} control>
             AC
          </Button>
-         <Button control>DEL</Button>
+         <Button onClick={deleteHandler} control>
+            DEL
+         </Button>
          <Button operation>÷</Button>
          <Button data="7" onClick={appendValue}>
             7
